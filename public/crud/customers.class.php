@@ -31,6 +31,11 @@ class Customers
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute(array($id));
                 $data = $stmt->fetch(PDO::FETCH_OBJ);
+                $sql_booking = "SELECT bookingid FROM bookings WHERE customerid=?";
+                $stmt_booking = $this->db->prepare($sql_booking);
+                $stmt_booking->execute(array($id));
+                $data_booking = $stmt_booking->fetchAll(PDO::FETCH_OBJ);
+                $data->bookings = $data_booking;
                 return $data;
         }
 

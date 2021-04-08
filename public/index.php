@@ -74,6 +74,10 @@ $action = $url_array[0];
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($action) {
+	case 'bookings':
+		require_once("crud/bookings.class.php");
+		require_once("crud/bookings.php");
+		break;	
 	case 'customers':
 		require_once("crud/customers.class.php");
 		require_once("crud/customers.php");
