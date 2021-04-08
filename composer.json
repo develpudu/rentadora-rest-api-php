@@ -1,0 +1,38 @@
+{
+    "name": "develpudu/rentadora-rest-api-php",
+    "description": "REST APIREST API para administrar un rentadora de autos hecha en php nativo y conecta a una base de datos mysql, autorizacion via JWT.",
+    "keywords": [
+        "php",
+        "rest-api",
+        "mysql",
+        "rest",
+        "api"
+    ],
+    "homepage": "https://github.com/develpudu/rentadora-rest-api-php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Devel Pudu",
+            "email": "develpudu@gmail.com",
+            "homepage": "https://github.com/develpudu"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.3",
+        "vlucas/phpdotenv": "^5.2",
+        "firebase/php-jwt": "^5.0"
+    },
+    "config": {
+        "sort-packages": true,
+        "process-timeout": 0,
+        "platform": {
+            "php": "7.3.0"
+        }
+    },
+    "scripts": {
+        "database": "php database/restart-db.php",
+        "start": "php -S 0.0.0.0:8080 -t public public/index.php"
+    }
+}

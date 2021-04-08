@@ -1,0 +1,6 @@
+# production
+vendor/
+
+# misc
+.DS_Store
+.env
