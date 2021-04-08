@@ -39,19 +39,19 @@ class Customers
                 return $data;
         }
 
-        public function insertCustomers($firstname, $lastname, $dni)
+        public function insertCustomers($firstname, $lastname, $license)
         {
-                $sql = "INSERT INTO customers (fistname, lastname, dni) VALUES (?,?,?)";
+                $sql = "INSERT INTO customers (fistname, lastname, license) VALUES (?,?,?)";
                 $stmt = $this->db->prepare($sql);
-                $status = $stmt->execute(array($firstname, $lastname, $dni));
+                $status = $stmt->execute(array($firstname, $lastname, $license));
                 return $status;
         }
 
-        public function updateCustomers($id, $firstname, $lastname, $dni)
+        public function updateCustomers($id, $firstname, $lastname, $license)
         {
-                $sql = "UPDATE customers SET firstname=?, lastname=?, dni=? WHERE id=?";
+                $sql = "UPDATE customers SET firstname=?, lastname=?, license=? WHERE id=?";
                 $stmt = $this->db->prepare($sql);
-                $status = $stmt->execute(array($firstname, $lastname, $dni, $id));
+                $status = $stmt->execute(array($firstname, $lastname, $license, $id));
                 return $status;
         }
 

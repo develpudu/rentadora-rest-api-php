@@ -27,11 +27,13 @@ if ($method == 'GET') {
     $post = json_decode($json); // decode to object
 
     // check input
-    if ($post->fistname == "" || $post->lastname == "" || $post->dni == "") {
+    if (
+        $post->fistname == "" || $post->lastname == "" || $post->license == ""
+    ) {
         $response['status'] = 400;
         $response['data'] = array('error' => 'Datos incompletos');
     } else {
-        $status = $customers->insertCustomers($post->fistname, $post->lastname, $post->dni);
+        $status = $customers->insertCustomers($post->fistname, $post->lastname, $post->license);
         if ($status == 1) {
             $response['status'] = 201;
             $response['data'] = array('success' => 'Datos guardados exitosamente');
@@ -55,11 +57,11 @@ if ($method == 'GET') {
             $post = json_decode($json); // decode to object
 
             // check input completeness
-            if ($post->fistname == "" || $post->lastname == "" || $post->dni == "") {
+            if ($post->fistname == "" || $post->lastname == "" || $post->license == "") {
                 $response['status'] = 400;
                 $response['data'] = array('error' => 'Datos incompletos');
             } else {
-                $status = $customers->updateCustomers($id, $post->fistname, $post->lastname, $post->dni);
+                $status = $customers->updateCustomers($id, $post->fistname, $post->lastname, $post->license);
                 if ($status == 1) {
                     $response['status'] = 200;
                     $response['data'] = array('success' => 'Los datos se editaron correctamente');

@@ -17,6 +17,24 @@ class Bookings
                 return $dbConnection;
         }
 
+        private function genBookingId()
+        {
+                $chars = array(
+                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+                        'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+                        'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+                );
+
+                $long = 6;
+
+                $bookingid = '';
+                for ($i = 0; $i < $long; $i++) {
+                        $bookingid .= $chars[rand(0, count($chars))];
+                }
+                return $bookingid;
+        }        
+
         public function getAllBookings()
         {
                 $sql = "SELECT bookings.*, cars.name AS car, customers.* FROM bookings INNER JOIN cars ON bookings.carid = cars.id INNER JOIN customers ON bookings.customerid = customers.id ORDER BY bookingid ASC";
@@ -34,27 +52,28 @@ class Bookings
                 return $data;
         }
 
-        public function insertBookings($name, $costformula, $km)
+        public function insertBookings($customerid, $carid, $startdate, $startkm)
         {
-                $sql = "INSERT INTO bookings (name, costformula, km) VALUES (?,?,?)";
+                $bookingid = $this->genBookingId();
+                $sql = "INSERT INTO bookings (bookingid, customerid, carid, startdate, startkm) VALUES (?,?,?,?,?)";
                 $stmt = $this->db->prepare($sql);
-                $status = $stmt->execute(array($name, $costformula, $km));
+                $status = $stmt->execute(array($bookingid, $customerid, $carid, $startdate, $startkm));
                 return $status;
         }
 
-        public function updateBookings($id, $name, $costformula, $km)
+        public function updateBookings($customerid, $carid, $startdate, $startkm, $id)
         {
-                $sql = "UPDATE bookings SET name=?, costformula=?, km=? WHERE id=?";
+                $sql = "UPDATE bookings SET customerid=?, carid=?, startdate=?, startkm=? WHERE id=?";
                 $stmt = $this->db->prepare($sql);
-                $status = $stmt->execute(array($name, $costformula, $km, $id));
+                $status = $stmt->execute(array($customerid, $carid, $startdate, $startkm, $id));
                 return $status;
         }
 
-        public function deleteBookings($id)
+        public function deleteBookings($bookingid)
         {
-                $sql = "DELETE FROM bookings WHERE id=?";
+                $sql = "DELETE FROM bookings WHERE bookingid=?";
                 $stmt = $this->db->prepare($sql);
-                $status = $stmt->execute(array($id));
+                $status = $stmt->execute(array($bookingid));
                 return $status;
         }
 }

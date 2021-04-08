@@ -27,11 +27,13 @@ if ($method == 'GET') {
     $post = json_decode($json); // decode to object
 
     // check input
-    if ($post->name == "" || $post->costformula == "" || $post->km == "") {
+    if (
+        $post->customerid == "" || $post->carid == "" || $post->startdate == "" || $post->startkm == ""
+    ) {
         $response['status'] = 400;
         $response['data'] = array('error' => 'Datos incompletos');
     } else {
-        $status = $bookings->insertBookings($post->name, $post->costformula, $post->km);
+        $status = $bookings->insertBookings($post->customerid, $post->carid, $post->startdate, $post->startkm);
         if ($status == 1) {
             $response['status'] = 201;
             $response['data'] = array('success' => 'Datos guardados exitosamente');
@@ -43,9 +45,9 @@ if ($method == 'GET') {
 } elseif ($method == 'PUT') {
     // METHOD : PUT api/bookings/:id
     if (isset($url_array[1])) {
-        $id = $url_array[1];
+        $bookingid = $url_array[1];
         // check if id exist in database
-        $data = $bookings->getBookings($id);
+        $data = $bookings->getBookings($bookingid);
         if (empty($data)) {
             $response['status'] = 404;
             $response['data'] = array('error' => 'Datos no encontrados');
@@ -55,11 +57,11 @@ if ($method == 'GET') {
             $post = json_decode($json); // decode to object
 
             // check input completeness
-            if ($post->name == "" || $post->costformula == "" || $post->km == "") {
+            if ($post->customerid == "" || $post->carid == "" || $post->startdate == "" || $post->startkm == "") {
                 $response['status'] = 400;
                 $response['data'] = array('error' => 'Datos incompletos');
             } else {
-                $status = $bookings->updateBookings($id, $post->name, $post->costformula, $post->km);
+                $status = $bookings->updateBookings($post->customerid, $post->carid, $post->startdate, $post->startkm, $post->id);
                 if ($status == 1) {
                     $response['status'] = 200;
                     $response['data'] = array('success' => 'Los datos se editaron correctamente');
@@ -73,14 +75,14 @@ if ($method == 'GET') {
 } elseif ($method == 'DELETE') {
     // METHOD : DELETE api/bookings/:id
     if (isset($url_array[1])) {
-        $id = $url_array[1];
+        $bookingidid = $url_array[1];
         // check if id exist in database
-        $data = $bookings->getBookings($id);
+        $data = $bookings->getBookings($bookingidid);
         if (empty($data)) {
             $response['status'] = 404;
             $response['data'] = array('error' => 'Datos no encontrados');
         } else {
-            $status = $bookings->deleteBookings($id);
+            $status = $bookings->deleteBookings($bookingidid);
             if ($status == 1) {
                 $response['status'] = 200;
                 $response['data'] = array('success' => 'Datos eliminados con éxito');
