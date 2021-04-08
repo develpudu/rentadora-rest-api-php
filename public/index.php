@@ -74,6 +74,11 @@ $action = $url_array[0];
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($action) {
+	case 'customers':
+		require_once("crud/customers.class.php");
+		require_once("crud/customers.php");
+		break;
+
     case 'cars':
         require_once("crud/cars.class.php");
         require_once("crud/cars.php");
@@ -99,6 +104,7 @@ switch ($action) {
 		// Set default HTTP response
 		$url = $_ENV['APP_DOMAIN'];
         $endpoints = [
+			'cars' => $url . '/customers',
             'cars' => $url . '/cars',
 			'login' => $url . '/login',
             'status' => $url . '/status',

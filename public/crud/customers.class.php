@@ -1,6 +1,7 @@
 <?php
 
-class Users
+
+class Customers
 {
 
         public function __construct()
@@ -16,51 +17,42 @@ class Users
                 return $dbConnection;
         }
 
-        public function getAllUsers()
+        public function getAllCustomers()
         {
-                $sql = "SELECT * FROM users ORDER BY name ASC";
+                $sql = "SELECT * FROM customers ORDER BY lastname ASC";
                 $stmt = $this->db->query($sql);
                 $data = $stmt->fetchAll(PDO::FETCH_OBJ);
                 return $data;
         }
 
-        public function checkLogin($email, $password)
+        public function getCustomers($id)
         {
-                $sql = "SELECT * FROM users WHERE email=? AND password=?";
-                $stmt = $this->db->prepare($sql);
-                $stmt->execute(array($email, $password));
-                $data = $stmt->fetch(PDO::FETCH_OBJ);
-                return $data;
-        }
-
-        public function getUsers($id)
-        {
-                $sql = "SELECT * FROM users WHERE id=?";
+                $sql = "SELECT * FROM customers WHERE id=?";
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute(array($id));
                 $data = $stmt->fetch(PDO::FETCH_OBJ);
                 return $data;
         }
 
-        public function insertUsers($name, $email, $password)
+        public function insertCustomers($firstname, $lastname, $dni)
         {
-                $sql = "INSERT INTO users (name, email, password) VALUES (?,?,?)";
+                $sql = "INSERT INTO customers (fistname, lastname, dni) VALUES (?,?,?)";
                 $stmt = $this->db->prepare($sql);
-                $status = $stmt->execute(array($name, $email, md5($password)));
+                $status = $stmt->execute(array($firstname, $lastname, $dni));
                 return $status;
         }
 
-        public function updateUsers($id, $name, $email, $password)
+        public function updateCustomers($id, $firstname, $lastname, $dni)
         {
-                $sql = "UPDATE users SET name=?, email=?, password=? WHERE id=?";
+                $sql = "UPDATE customers SET firstname=?, lastname=?, dni=? WHERE id=?";
                 $stmt = $this->db->prepare($sql);
-                $status = $stmt->execute(array($name, $email, md5($password), $id));
+                $status = $stmt->execute(array($firstname, $lastname, $dni, $id));
                 return $status;
         }
 
-        public function deleteUsers($id)
+        public function deleteCustomers($id)
         {
-                $sql = "DELETE FROM users WHERE id=?";
+                $sql = "DELETE FROM customers WHERE id=?";
                 $stmt = $this->db->prepare($sql);
                 $status = $stmt->execute(array($id));
                 return $status;
