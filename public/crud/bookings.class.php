@@ -37,7 +37,7 @@ class Bookings
 
         public function getAllBookings()
         {
-                $sql = "SELECT bookings.*, cars.name AS car, customers.* FROM bookings INNER JOIN cars ON bookings.carid = cars.id INNER JOIN customers ON bookings.customerid = customers.id ORDER BY bookingid ASC";
+                $sql = "SELECT bookings.*, cars.name AS car, customers.* FROM bookings INNER JOIN cars ON bookings.carid = cars.id INNER JOIN customers ON bookings.customerid = customers.id ORDER BY bookings.startdate ASC";
                 $stmt = $this->db->query($sql);
                 $data = $stmt->fetchAll(PDO::FETCH_OBJ);
                 return $data;
