@@ -1,6 +1,7 @@
 <?php
 // CORS
-header('Access-Control-Allow-Origin: ' . $_ENV['FRONTEND_URL']);
+$origin = ($_SERVER['SERVER_NAME'] == $_ENV['FRONTEND_URL_DEVELOPMENT']) ? 'https://' . $_ENV['FRONTEND_URL_DEVELOPMENT'] : 'https://' . $_ENV['FRONTEND_URL_PRODUCTION'];
+header('Access-Control-Allow-Origin: ' . $origin);
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: HEAD, DELETE, POST, PUT, GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
