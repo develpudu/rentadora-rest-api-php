@@ -57,11 +57,11 @@ if ($method == 'GET') {
             $post = json_decode($json); // decode to object
 
             // check input completeness
-            if ($post->customerid == "" || $post->carid == "" || $post->startdate == "" || $post->startkm == "") {
+            if ($post->enddate == "" || $post->endkm == "") {
                 $response['status'] = 400;
                 $response['data'] = array('error' => 'Datos incompletos');
             } else {
-                $status = $bookings->updateBookings($post->customerid, $post->carid, $post->startdate, $post->startkm, $post->id);
+                $status = $bookings->updateBookings($post->enddate, $post->endkm, $bookingid);
                 if ($status == 1) {
                     $response['status'] = 200;
                     $response['data'] = array('success' => 'Los datos se editaron correctamente');
