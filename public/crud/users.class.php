@@ -16,7 +16,7 @@ class Users
                 return $dbConnection;
         }
 
-        public function getAllUsers()
+        public function getAll()
         {
                 $sql = "SELECT * FROM users ORDER BY name ASC";
                 $stmt = $this->db->query($sql);

@@ -5,7 +5,7 @@ $bookings = new Bookings();
 if ($method == 'GET') {
     if (!isset($url_array[1])) { // if parameter id not exist
         // METHOD : GET api/bookings
-        $data = $bookings->getAllBookings();
+        $data = $bookings->getAll();
         $response['status'] = 200;
         $response['data'] = $data;
     } else { // if parameter id exist

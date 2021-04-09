@@ -33,9 +33,9 @@ class Bookings
                         $bookingid .= $chars[rand(0, count($chars))];
                 }
                 return $bookingid;
-        }        
+        }
 
-        public function getAllBookings()
+        public function getAll()
         {
                 $sql = "SELECT bookings.*, cars.name AS car, customers.* FROM bookings INNER JOIN cars ON bookings.carid = cars.id INNER JOIN customers ON bookings.customerid = customers.id ORDER BY bookings.startdate ASC";
                 $stmt = $this->db->query($sql);

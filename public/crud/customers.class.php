@@ -17,7 +17,7 @@ class Customers
                 return $dbConnection;
         }
 
-        public function getAllCustomers()
+        public function getAll()
         {
                 $sql = "SELECT * FROM customers ORDER BY lastname ASC";
                 $stmt = $this->db->query($sql);

@@ -5,7 +5,7 @@ $invoices = new Invoices();
 if ($method == 'GET') {
     if (!isset($url_array[1])) { // if parameter id not exist
         // METHOD : GET api/invoices
-        $data = $invoices->getAllInvoices();
+        $data = $invoices->getAll();
         $response['status'] = 200;
         $response['data'] = $data;
     } else { // if parameter id exist

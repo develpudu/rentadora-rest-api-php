@@ -5,7 +5,7 @@ $cars = new Cars();
 if($method=='GET'){
     if(!isset($url_array[1])){ // if parameter id not exist
         // METHOD : GET api/cars
-        $data=$cars->getAllCars();
+        $data = $cars->getAll();
         $response['status'] = 200;
         $response['data'] = $data;
     }else{ // if parameter id exist

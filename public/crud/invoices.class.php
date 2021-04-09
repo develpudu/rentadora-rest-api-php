@@ -17,7 +17,7 @@ class Invoices
                 return $dbConnection;
         }
 
-        public function getAllInvoices()
+        public function getAll()
         {
                 $sql = "SELECT bookings.*, cars.name AS car, customers.*, invoices.* FROM invoices INNER JOIN bookings ON invoices.bookingid = bookings.bookingid INNER JOIN cars ON bookings.carid = cars.id INNER JOIN customers ON bookings.customerid = customers.id ORDER BY invoices.id ASC";
                 $stmt = $this->db->query($sql);

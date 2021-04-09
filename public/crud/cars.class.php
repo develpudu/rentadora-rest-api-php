@@ -17,7 +17,7 @@ class Cars
 		return $dbConnection;
 	}
 
-        public function getAllCars()
+        public function getAll()
         {
                 $sql = "SELECT * FROM cars ORDER BY name ASC";
                 $stmt = $this->db->query($sql); 

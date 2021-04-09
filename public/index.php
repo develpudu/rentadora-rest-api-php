@@ -1,9 +1,12 @@
 <?php
+
+define('API_VERSION', '0.11.0');
+
 require __DIR__ . '/../vendor/autoload.php';
+require "cors.php";
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
-require_once("cors.php");
 
 function deliver_response($response)
 {
@@ -66,86 +69,90 @@ function deliver_response($response)
 
 function getDbStats()
 {
-	foreach (glob('crud/*.class.php') as $filename) {
-		require_once $filename;
-	}
+	// Set automatic endpoints
+	$directory = 'crud' . DIRECTORY_SEPARATOR;
 
-	// TODO: Hacer automatico
-	$cars = new Cars();
-	$customers = new Customers();
-	$bookings = new Bookings();
-	$invoices = new Invoices();
-	return [
-		'cars' => count($cars->getAllCars()),
-		'customers' => count($customers->getAllCustomers()),
-		'bookings' => count($bookings->getAllBookings()),
-		'invoices' => count($invoices->getAllInvoices()),
-	];
+	$dbstats = array();
+	foreach (glob($directory . "*.class.php") as $filename) {
+		if (!is_dir($filename)) {
+			require_once $filename;
+			$replace = array(
+				$directory, '.php', '.class'
+			);
+			$filename = str_replace($replace, '', $filename);
+			$class = ucfirst($filename);
+			$obj = new $class;
+			$dbstats += [
+				$filename => count($obj->getAll()),
+			];
+		}
+	}
+	return $dbstats;
 }
 
 $url_array = explode('/', $_SERVER['REQUEST_URI']);
 array_shift($url_array); // remove first value as it's empty
-// remove 2nd and 3rd array, because it's directory
-//array_shift($url_array); // 2nd = 'NativeREST'
-//array_shift($url_array); // 3rd = 'api'
 
 // get the action (resource, collection)
 $action = $url_array[0];
 // get the method
 $method = $_SERVER['REQUEST_METHOD'];
 
-switch ($action) {
-	case 'invoices':
-		require_once("crud/invoices.class.php");
-		require_once("crud/invoices.php");
-		break;		
-	case 'bookings':
-		require_once("crud/bookings.class.php");
-		require_once("crud/bookings.php");
-		break;	
-	case 'customers':
-		require_once("crud/customers.class.php");
-		require_once("crud/customers.php");
-		break;
+if ($action == 'status') {
+	$status = [
+		'stats' => getDbStats(),
+		'MySQL' => 'OK',
+		'version' => API_VERSION,
+		'timestamp' => date('d-m-Y', time()),
+	];
+	$response['status'] = 200;
+	$response['data'] = $status;
+} else if (empty($action)) {
+	// Set default HTTP response
+	$url = $_ENV['APP_DOMAIN'];
 
-    case 'cars':
-        require_once("crud/cars.class.php");
-        require_once("crud/cars.php");
-        break;
+	$endpoints_base = [
+		'this help' => $url . '',
+		'status' => $url . '/status',
+	];
 
-	case 'login':
-		require_once("crud/users.class.php");
-		require_once("crud/login.php");
-		break;
-		
-    case 'status':
-		$status = [
-			'stats' => getDbStats(),
-			'MySQL' => 'OK',
-			'version' => $_ENV['API_VERSION'],
-			'timestamp' => date('d-m-Y', time()),
-		];
-		$response['status'] = 200;
-		$response['data'] = $status;        
-        break;
-    default:
-		// Set default HTTP response
-		$url = $_ENV['APP_DOMAIN'];
-        $endpoints = [
-			'cars' => $url . '/customers',
-            'cars' => $url . '/cars',
-			'login' => $url . '/login',
-            'status' => $url . '/status',
-            'this help' => $url . '',
-        ];
-        $message = [
-            'endpoints' => $endpoints,
-			'version' => $_ENV['API_VERSION'],
-            'timestamp' => date('d-m-Y',time()),
-        ];    
-        $response['status'] = 200;
-        $response['data'] = $message;
-        break;
+	// Set automatic endpoints
+	$directory = 'crud' . DIRECTORY_SEPARATOR;
+
+	$endpoints_files = array();
+	foreach (glob($directory . "*.php") as $filename) {
+		if (!is_dir($filename)) {
+			$replace = array(
+				$directory, '.php', '.class'
+			);
+			$filename = str_replace($replace, '', $filename);
+			$endpoints_files += [
+				$filename => $url . '/' . $filename,
+			];
+		}
+	}
+	
+	$message = [
+		'endpoints' => $endpoints_base + $endpoints_files,
+		'version' => API_VERSION,
+		'timestamp' => date('d-m-Y',time()),
+	];    
+	$response['status'] = 200;
+	$response['data'] = $message;
+} else {
+	if (file_exists('crud/' . $action . '.php')) {
+		// Login use class Users
+		if ($action == 'login') {
+			require_once 'crud/users.class.php';
+			require_once 'crud/' . $action . '.php';
+		} else {
+			require_once 'crud/' . $action . '.class.php';
+			require_once 'crud/' . $action . '.php';
+		}
+	} else {
+		$response['status'] = 404;
+		$response['data'] = 'Endpoint invalid';
+	}
 }
 
 // Return Response to browser

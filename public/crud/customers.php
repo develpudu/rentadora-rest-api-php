@@ -5,7 +5,7 @@ $customers = new Customers();
 if ($method == 'GET') {
     if (!isset($url_array[1])) { // if parameter id not exist
         // METHOD : GET api/customers
-        $data = $customers->getAllCustomers();
+        $data = $customers->getAll();
         $response['status'] = 200;
         $response['data'] = $data;
     } else { // if parameter id exist
