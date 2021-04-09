@@ -24,6 +24,7 @@ if ($method == 'GET') {
     // METHOD : POST api/bookings
     // get post from client
     require_once('customers.class.php');
+    require_once('cars.class.php');
     $json = file_get_contents('php://input');
     $post = json_decode($json); // decode to object
 
@@ -39,6 +40,8 @@ if ($method == 'GET') {
         if (!empty($customerid)) {
             $status = $bookings->insertBookings($customerid, $post->car, $post->startdate, $post->startkm);
             if (!empty($status)) {
+                $cars = new Cars();
+                $cars->updateCarsStatus(0, $post->car);
                 $response['status'] = 201;
                 $response['data'] = array('id' => $status);
             } else {
@@ -77,6 +80,7 @@ if ($method == 'GET') {
                     $customerid = $data->customerid;
                     $totalkm = $post->endkm - $data->startkm;
                     $cars = new Cars();
+                    $cars->updateCarsStatus(1, $carid);
                     $car = $cars->getCars($carid);
                     $cost = $car->costformula;
                     $totalcost = $cost * $totalkm;

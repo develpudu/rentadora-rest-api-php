@@ -25,6 +25,14 @@ class Cars
                 return $data;
 	}
 
+        public function getCarsStatus()
+        {
+                $sql = "SELECT * FROM cars WHERE status=1 ORDER BY name ASC";
+                $stmt = $this->db->query($sql);
+                $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+                return $data;
+        }        
+
         public function getCars($id)
         {
                 $sql = "SELECT * FROM cars WHERE id=?";
@@ -49,6 +57,14 @@ class Cars
                 $status = $stmt->execute(array($name, $costformula, $km, $id));
                 return $status;
 	}
+
+        public function updateCarsStatus($status, $id)
+        {
+                $sql = "UPDATE cars SET status=? WHERE id=?";
+                $stmt = $this->db->prepare($sql);
+                $status = $stmt->execute(array($status, $id));
+                return $status;
+        }        
 
         public function deleteCars($id)
         {

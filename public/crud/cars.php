@@ -9,15 +9,28 @@ if($method=='GET'){
         $response['status'] = 200;
         $response['data'] = $data;
     }else{ // if parameter id exist
-        // METHOD : GET api/cars/:id
-        $id=$url_array[1];
-        $data=$cars->getCars($id);
-        if(empty($data)) {
-            $response['status'] = 404;
-            $response['data'] = array('error' => 'Objeto no encontrado');	
-        }else{
-            $response['status'] = 200;
-            $response['data'] = $data;	
+        // METHOD : GET api/cars/status
+        if ($url_array[1] == 'status') {
+            // METHOD : GET api/cars/status
+            $data = $cars->getCarsStatus();
+            if (empty($data)) {
+                $response['status'] = 404;
+                $response['data'] = array('error' => 'Objeto no encontrado');
+            } else {
+                $response['status'] = 200;
+                $response['data'] = $data;
+            }
+        } else {
+            // METHOD : GET api/cars/:id
+            $id=$url_array[1];
+            $data=$cars->getCars($id);
+            if(empty($data)) {
+                $response['status'] = 404;
+                $response['data'] = array('error' => 'Objeto no encontrado');
+            } else {
+                $response['status'] = 200;
+                $response['data'] = $data;	
+            }
         }
     }
 }
