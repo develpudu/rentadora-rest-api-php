@@ -1,7 +1,6 @@
 <?php
 // CORS
-$origin = ($_SERVER['SERVER_NAME'] == $_ENV['FRONTEND_URL_DEVELOPMENT']) ? 'https://' . $_ENV['FRONTEND_URL_DEVELOPMENT'] : 'https://' . $_ENV['FRONTEND_URL_PRODUCTION'];
-header('Access-Control-Allow-Origin: ' . $origin);
+header('Access-Control-Allow-Origin: https://rentadora-frontend-react-develpudu.vercel.app');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: HEAD, DELETE, POST, PUT, GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
