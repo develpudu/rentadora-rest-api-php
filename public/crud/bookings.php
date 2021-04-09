@@ -43,6 +43,8 @@ if ($method == 'GET') {
         }
     }
 } elseif ($method == 'PUT') {
+    require_once('cars.class.php');
+    require_once('invoices.class.php');
     // METHOD : PUT api/bookings/:id
     if (isset($url_array[1])) {
         $bookingid = $url_array[1];
@@ -63,8 +65,22 @@ if ($method == 'GET') {
             } else {
                 $status = $bookings->updateBookings($post->enddate, $post->endkm, $bookingid);
                 if ($status == 1) {
-                    $response['status'] = 200;
-                    $response['data'] = array('success' => 'Los datos se editaron correctamente');
+                    $carid = $data->carid;
+                    $customerid = $data->customerid;
+                    $totalkm = $post->endkm - $data->startkm;
+                    $cars = new Cars();
+                    $car = $cars->getCars($carid);
+                    $cost = $car->costformula;
+                    $totalcost = $cost * $totalkm;
+                    $invoices = new Invoices();
+                    $invoice = $invoices->insertInvoices($bookingid, $totalcost, $totalkm, $carid, $customerid);
+                    if ($invoice == 1) {
+                        $response['status'] = 200;
+                        $response['data'] = array('success' => 'Los datos se editaron correctamente y se genero la factura');
+                    } else {
+                        $response['status'] = 400;
+                        $response['data'] = array('error' => 'Hubo un error generando la factura');
+                    }
                 } else {
                     $response['status'] = 400;
                     $response['data'] = array('error' => 'Hay un error');
