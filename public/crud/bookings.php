@@ -23,24 +23,31 @@ if ($method == 'GET') {
 } elseif ($method == 'POST') {
     // METHOD : POST api/bookings
     // get post from client
+    require_once('customers.class.php');
     $json = file_get_contents('php://input');
     $post = json_decode($json); // decode to object
 
     // check input
-    if (
-        $post->customerid == "" || $post->carid == "" || $post->startdate == "" || $post->startkm == ""
+    if ($post->firstname == "" || $post->lastname == "" || $post->car == "" || $post->license == "" || $post->startmkm == "" || $post->startdate == ""
     ) {
         $response['status'] = 400;
         $response['data'] = array('error' => 'Datos incompletos');
     } else {
-        $status = $bookings->insertBookings($post->customerid, $post->carid, $post->startdate, $post->startkm);
-        if ($status == 1) {
-            $response['status'] = 201;
-            $response['data'] = array('success' => 'Datos guardados exitosamente');
+        $customers = new Customers();
+        $customerid = $customers->insertCustomers($post->firstname, $post->lastname, $post->license);
+        if (!empty($customerid)) {
+            $status = $bookings->insertBookings($customerid, $post->car, $post->startdate, $post->startkm);
+            if (!empty($status)) {
+                $response['status'] = 201;
+                $response['data'] = array('id' => $status);
+            } else {
+                $response['status'] = 400;
+                $response['data'] = array('error' => 'Hay un error');
+            }
         } else {
             $response['status'] = 400;
             $response['data'] = array('error' => 'Hay un error');
-        }
+        }            
     }
 } elseif ($method == 'PUT') {
     require_once('cars.class.php');

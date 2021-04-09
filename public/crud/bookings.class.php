@@ -57,8 +57,8 @@ class Bookings
                 $bookingid = $this->genBookingId();
                 $sql = "INSERT INTO bookings (bookingid, customerid, carid, startdate, startkm) VALUES (?,?,?,?,?)";
                 $stmt = $this->db->prepare($sql);
-                $status = $stmt->execute(array($bookingid, $customerid, $carid, $startdate, $startkm));
-                return $status;
+                $stmt->execute(array($bookingid, $customerid, $carid, $startdate, $startkm));
+                return $bookingid;
         }
 
         public function updateBookings($enddate, $endkm, $bookingid)

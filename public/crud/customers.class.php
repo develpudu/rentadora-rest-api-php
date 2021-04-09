@@ -41,10 +41,11 @@ class Customers
 
         public function insertCustomers($firstname, $lastname, $license)
         {
-                $sql = "INSERT INTO customers (fistname, lastname, license) VALUES (?,?,?)";
+                $sql = "INSERT INTO customers (firstname, lastname, license) VALUES (?,?,?)";
                 $stmt = $this->db->prepare($sql);
-                $status = $stmt->execute(array($firstname, $lastname, $license));
-                return $status;
+                $stmt->execute(array($firstname, $lastname, $license));
+                $customerid = $this->db->lastInsertId();
+                return $customerid;
         }
 
         public function updateCustomers($id, $firstname, $lastname, $license)
