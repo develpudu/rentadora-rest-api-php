@@ -28,7 +28,8 @@ if ($method == 'GET') {
     $post = json_decode($json); // decode to object
 
     // check input
-    if ($post->firstname == "" || $post->lastname == "" || $post->car == "" || $post->license == "" || $post->startmkm == "" || $post->startdate == ""
+    if (
+        $post->firstname == "" || $post->lastname == "" || $post->car == "" || $post->license == "" || $post->startkm == "" || $post->startdate == ""
     ) {
         $response['status'] = 400;
         $response['data'] = array('error' => 'Datos incompletos');
