@@ -63,7 +63,7 @@ class Bookings
 
         public function updateBookings($enddate, $endkm, $bookingid)
         {
-                $sql = "UPDATE bookings SET enddate=?, endkm=?, isopen=1 WHERE bookingid=?";
+                $sql = "UPDATE bookings SET enddate=?, endkm=?, isopen=0 WHERE bookingid=?";
                 $stmt = $this->db->prepare($sql);
                 $status = $stmt->execute(array($enddate, $endkm, $bookingid));
                 return $status;
