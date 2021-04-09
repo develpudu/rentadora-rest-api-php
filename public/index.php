@@ -4,7 +4,9 @@ require __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 require_once("cors.php");
-function deliver_response($response){
+
+function deliver_response($response)
+{
 	// Define HTTP responses
 	$http_response_code = array(
 		100 => 'Continue',  
@@ -62,6 +64,25 @@ function deliver_response($response){
 	exit;
 }
 
+function getDbStats()
+{
+	foreach (glob('crud/*.class.php') as $filename) {
+		require_once $filename;
+	}
+
+	// TODO: Hacer automatico
+	$cars = new Cars();
+	$customers = new Customers();
+	$bookings = new Bookings();
+	$invoices = new Invoices();
+	return [
+		'cars' => count($cars->getAllCars()),
+		'customers' => count($customers->getAllCustomers()),
+		'bookings' => count($bookings->getAllBookings()),
+		'invoices' => count($invoices->getAllInvoices()),
+	];
+}
+
 $url_array = explode('/', $_SERVER['REQUEST_URI']);
 array_shift($url_array); // remove first value as it's empty
 // remove 2nd and 3rd array, because it's directory
@@ -98,15 +119,14 @@ switch ($action) {
 		break;
 		
     case 'status':
-        // TODO: Hacer un conteo de cada endpoint
-        // $status = [
-        //     'stats' => getDbStats(),
-        //     'MySQL' => 'OK',
-        //     'version' => API_VERSION,
-        //     'timestamp' => date('d-m-Y',time()),
-        // ];
-        $response['status'] = 404;
-        $response['data'] = null;        
+		$status = [
+			'stats' => getDbStats(),
+			'MySQL' => 'OK',
+			'version' => $_ENV['API_VERSION'],
+			'timestamp' => date('d-m-Y', time()),
+		];
+		$response['status'] = 200;
+		$response['data'] = $status;        
         break;
     default:
 		// Set default HTTP response
