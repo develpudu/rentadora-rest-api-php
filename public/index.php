@@ -1,6 +1,6 @@
 <?php
 
-define('API_VERSION', '0.11.0');
+define('API_VERSION', '0.23.0');
 
 require __DIR__ . '/../vendor/autoload.php';
 require "cors.php";
